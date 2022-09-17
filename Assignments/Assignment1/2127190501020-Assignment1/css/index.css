@@ -1,0 +1,171 @@
+html {
+  scroll-behavior: smooth;
+}
+
+.container {
+  position: relative;
+  margin: 2rem auto;
+  width: 80%;
+  font-family: Arial, Helvetica, sans-serif; 
+}
+
+.main {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.main .img {
+  width: 170px;
+  height: 170px;
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  background-color: #ddd;
+}
+
+.main .intro {
+  margin-left: 30px;
+  align-self: center;
+}
+
+.main .title {
+  display: block;
+  margin: -10px 0 15px 0;
+  font-weight: 400;
+  color: rgb(48, 48, 48);
+}
+
+.main .buttons {
+  position: relative;
+  width: 100%;
+  outline: none;
+  display: flex;
+  flex-direction: row;
+}
+
+.main .buttons .btn {
+  border: none;
+  text-decoration: none;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 15px;
+}
+
+.main .buttons>:first-child {
+  background-color: rgb(29, 86, 232);
+  color: #fff;
+}
+
+.main .buttons>:last-child {
+  background-color: rgb(141, 12, 206);
+  color: #fff;
+  margin-left: 15px;
+}
+
+section {
+  margin: 50px auto !important;
+  border-top: 1.8px solid #ddd;
+}
+
+.info-section .about p {
+  word-spacing: 3px;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+
+.skill-section .skills .skill-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.skill-section .skills h2 {
+  margin-bottom: 5px;
+}
+
+.skill-section .skill-container .skill {
+  font-size: 13px;
+  padding: 10px 15px;
+  border-radius: 20px;
+  background-color:rgb(106, 9, 223);
+  color: #fff;
+  margin: 10px 8px 0 0;
+  /* margin: auto 15px; */
+}
+
+.contact form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: .8px solid #ddd;
+  border-radius: 12px;
+  padding: 15px 25px;
+  width: 500px;
+  box-sizing: border-box;
+}
+
+.contact form label, input {
+  display: block;
+  width: 100%;
+  margin-top: 10px; 
+  font-size: 17px;
+}
+
+.contact form label {
+  font-weight: 500;
+  margin-top: 15px;
+}
+
+.contact form input, .contact form textarea {
+  border: 2px solid #ddd;
+  box-sizing: border-box;
+  padding: 5px;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.contact form input:focus , .contact form textarea:focus{
+  border-color: dodgerblue;
+  transition: border-color .8s;
+  outline: none;
+}
+
+.contact form textarea {
+  margin: 15px 0;
+  height: 100px;
+  resize: none;
+}
+
+.contact form button {
+  border: none;
+  outline: none;
+  background-color: dodgerblue;
+  color: #fff;
+  border-radius: 12px;
+  padding: 10px;
+  font-size: 14px;
+  align-self: flex-start;
+  margin-bottom: 15px;
+}
+
+@media(max-width: 800px) {
+  .main {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .main .intro {
+    text-align: center;
+    margin-left: unset;
+  }
+
+  .main .buttons {
+    justify-content: center;
+  }
+
+  .contact form {
+    width: 100%;
+  }
+}
