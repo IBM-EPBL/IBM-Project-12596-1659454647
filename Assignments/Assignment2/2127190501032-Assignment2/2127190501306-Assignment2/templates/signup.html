@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <title>Sign up</title>
+</head>
+<body>
+  <div class="col-sm-7 col-md-5 login text-center">
+    <h3 class="text-center">Register</h3><br><hr>
+    <form action="{{ url_for('register') }}" method = "post">
+      <div class="form-group">
+        <label>Username:</label>
+          <input type="text" name = "username" class="form-control" placeholder = "Enter Username" required>
+      </div>
+      <div class="form-group">
+        <label>Password:</label>
+        <input type="password" class="error_display form-control" name = "password" placeholder = "Enter Password" required>          
+        <label>Confirm Password:</label>
+        <input type="password" name = "confirm_password" class="form-control" placeholder = "Enter Password" required>
+      </div>
+      <button class = "btn btn-primary btn-block mt-2">Register</button>
+    </form>
+    <p>Aldready have an account. <a href="{{ url_for('login') }}">Login</a> instead.</p>
+  </div>
+</body>
+</html>
