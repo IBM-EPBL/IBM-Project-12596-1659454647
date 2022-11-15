@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login page</title>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<h2> Personal expencences tracker</h2>
+<br>
+<div class="login">
+<form id ="login" method="get" action="login.php">
+<label>
+<b>Username
+</b>
+</label>
+<input type="text" name="username" id="Username" placeholder="Username">
+<br><br>
+<label>
+<b>Password
+</b>
+</label>
+<input type="Password" name="password" id="Password" placeholder="Password">
+<br><br>
+<input type="button" name="Login" id="log" value="Log In Here">
+<br><br>
+</form>
+</div>
+</body>
+</html>

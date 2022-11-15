@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %}
+  Update wallet
+{% endblock %}
+
+{% block body %}
+  <form action="/wallet/update-limit" method="post">
+    <label>Limit</label>
+    <input type="number" name="limit" placeholder="wallet limit" required>
+
+    <button>Update limit</button>
+  </form>
+{% endblock %}

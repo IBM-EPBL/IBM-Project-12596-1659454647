@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block title %}
+  Wallet
+{% endblock %}
+
+{% block body %}
+  <div class="wallet">
+    <div>
+      <p>Balance:</p>
+      <p>{{ wallet.balance }}</p>
+    </div>
+    <div>
+      <p>Limit:</p>
+      <p>{{ wallet.wallet_limit }}</p>
+    </div>
+  </div>
+  <div>
+    <a class="button" href="/wallet/update-limit">Update Wallet Limit</a>
+    <a class="button secondary" href="/expenses/add">Add Expense</a>
+  </div>
+{% endblock %}
