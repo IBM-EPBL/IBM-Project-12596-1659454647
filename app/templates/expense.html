@@ -50,15 +50,18 @@
                 <hr>
             </div>
         </div>
-        <div style="display:flex; justify-content:space-around; " class="col py-3">
+        <div style="display:flex; justify-content:space-between; " class="col py-3">
             {% for expense in expenses %}
 
             <div class="card" style="width: 18rem; height: 15rem;">
                 <div class="card-body">
                   <h5 style="border-bottom:1px solid gray ;" class="card-title">{{expense.TITLE}}</h5>
-                  <p class="card-text">{{expense.DESCRIPTION}}</p>
-                  <p  class="card-text">{{expense.AMOUNT}}</p>
-                  <p class="card-text">{{expense.EXPENSETYPE}}</p>
+                  <p style="color:black;" class="card-text">{{expense.DESCRIPTION}}</p>
+                  <p style="color: rgb(104, 99, 99);" class="card-text">{{expense.EXPENSETYPE}}</p>
+                  <div style="display:flex; justify-content:space-between; border-top: 1px solid gray;">
+                    <p  style="color:salmon; font-weight: bold;" class="card-text">₹ {{expense.AMOUNT}}</p>
+                    <p  style="color:chocolate; font-weight: bold;" class="card-text">{{expense.CREATED_AT}}</p>
+                  </div>
                 </div>
               </div>
               {% endfor %}

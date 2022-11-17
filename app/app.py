@@ -6,7 +6,7 @@ import ibm_db
 import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-from datetime import datetime, timedelta
+import datetime
 
 conn = ibm_db.connect("DATABASE=bludb;HOSTNAME=ea286ace-86c7-4d5b-8580-3fbfa46b1c66.bs2io90l08kqb1od8lcg.databases.appdomain.cloud;PORT=31505;SECURITY=SSL;SSLServerCertificate=ssl.crt;UID=qxn78437;PWD=whNl99ZgMIttkZ80", '', '')
 
@@ -149,12 +149,14 @@ def expense():
         description = request.form['description']
         amount = request.form['Amount']
         expenseType = request.form['exampleRadios']
-        insert_sql = 'INSERT INTO expenses (title,description,amount,expensetype) VALUES (?,?,?,?)'
+        date_object = datetime.date.today()
+        insert_sql = 'INSERT INTO expenses (title,description,amount,expensetype,created_at) VALUES (?,?,?,?,?)'
         pstmt = ibm_db.prepare(conn, insert_sql)
         ibm_db.bind_param(pstmt, 1, title)
         ibm_db.bind_param(pstmt, 2, description)
         ibm_db.bind_param(pstmt, 3, amount)
         ibm_db.bind_param(pstmt, 4, expenseType)
+        ibm_db.bind_param(pstmt, 5, date_object)
         ibm_db.execute(pstmt)
         return redirect(url_for('expense'))
 
