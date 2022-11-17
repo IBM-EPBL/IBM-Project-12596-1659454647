@@ -88,16 +88,23 @@ def signup():
             return render_template('signup.html', meg=mg)
         else:
             insert_sql = 'INSERT INTO users (USERNAME,EMAIL,PASSWORD) VALUES (?,?,?)'
+            wallet_sql = 'INSERT INTO wallet (user_email) VALUES (?)'
+
             pstmt = ibm_db.prepare(conn, insert_sql)
+            walletStmt = ibm_db.prepare(conn, wallet_sql)
+
             ibm_db.bind_param(pstmt, 1, username)
             ibm_db.bind_param(pstmt, 2, email)
             ibm_db.bind_param(pstmt, 3, pw)
             ibm_db.execute(pstmt)
 
+            ibm_db.bind_param(walletStmt, 1, email)
+            ibm_db.execute(walletStmt)
+
             session['username'] = username
             session['email'] = email
 
-            return redirect('/dashoard')
+            return redirect('/dashboard')
 
     else:
         return render_template("signup.html", meg=mg)
@@ -127,11 +134,22 @@ def add_expense():
         description = request.form['description']
         amount = request.form['Amount']
         expenseType = int(request.form['expense-type'])
+
+        if expenseType != 0 and expenseType != 1:
+            return "<h1>Invalid input</h1>"
         
         dateTime = datetime.now()
 
         insert_sql = 'INSERT INTO expenses (user_email, title,description,amount, credit, datetime) VALUES (?, ?,?,?,?, ?)'
+        
+        if expenseType == 1:
+            walletUpdateSql = 'UPDATE wallet SET balance = balance + ? WHERE user_email = ?'
+        else:
+            walletUpdateSql = 'UPDATE wallet SET balance = balance - ? WHERE user_email = ?'
+        
         pstmt = ibm_db.prepare(conn, insert_sql)
+        walletStmt = ibm_db.prepare(conn, walletUpdateSql)
+
         ibm_db.bind_param(pstmt, 1, session['email'])
         ibm_db.bind_param(pstmt, 2, title)
         ibm_db.bind_param(pstmt, 3, description)
@@ -139,6 +157,11 @@ def add_expense():
         ibm_db.bind_param(pstmt, 5, expenseType == 1)
         ibm_db.bind_param(pstmt, 6, dateTime)
         ibm_db.execute(pstmt)
+
+        ibm_db.bind_param(walletStmt, 1, amount)
+        ibm_db.bind_param(walletStmt, 2, session['email'])
+        ibm_db.execute(walletStmt)
+
         return redirect(url_for('dashboard'))
 
 
