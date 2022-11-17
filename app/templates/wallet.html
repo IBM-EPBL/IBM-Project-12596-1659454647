@@ -11,6 +11,12 @@
       <h3>Wallet Details:</h3><hr>
       <p>Balance:</p>
       <p class="bold">{{ wallet.BALANCE }}</p><hr>
+      <p>Amount Spent:</p>
+      <p class="bold">{{ amountSpent }}</p><hr>
+      <p>Amount Earned:</p>
+      <p class="bold">{{ wallet.BALANCE - amountSpent }}</p><hr>
+    </div>
+    <div class="custom-card">
       <p>Alert Limit:</p>
       <p class="bold">{{ wallet.ALERT_LIMIT }}</p>
     </div>

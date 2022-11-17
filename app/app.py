@@ -6,7 +6,7 @@ import ibm_db
 import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-import datetime
+from datetime import datetime
 
 conn = ibm_db.connect("DATABASE=bludb;HOSTNAME=ea286ace-86c7-4d5b-8580-3fbfa46b1c66.bs2io90l08kqb1od8lcg.databases.appdomain.cloud;PORT=31505;SECURITY=SSL;SSLServerCertificate=ssl.crt;UID=qxn78437;PWD=whNl99ZgMIttkZ80", '', '')
 
@@ -163,6 +163,41 @@ def add_expense():
         ibm_db.bind_param(walletStmt, 2, session['email'])
         ibm_db.execute(walletStmt)
 
+        # Query wallet balance
+        walletSql = "SELECT balance, alert_limit FROM wallet WHERE user_email = ?"
+        walletSql2 = "SELECT SUM(amount) FROM expenses WHERE user_email = ? AND credit=?"
+
+        walletStmt = ibm_db.prepare(conn, walletSql)
+        walletStmt2 = ibm_db.prepare(conn, walletSql2)
+
+        ibm_db.bind_param(walletStmt, 1, session['email'])
+        ibm_db.execute(walletStmt)
+
+        wallet = ibm_db.fetch_assoc(walletStmt)
+
+        # Get total amount debited
+        ibm_db.bind_param(walletStmt2, 1, session['email'])
+        ibm_db.bind_param(walletStmt2, 2, False)
+        ibm_db.execute(walletStmt2)
+
+        result = ibm_db.fetch_assoc(walletStmt2)
+        amountSpent = result.get('1')
+
+        # Send email.
+        if amountSpent > wallet.get("ALERT_LIMIT"):
+            # message = Mail(
+            #     from_email=('test-exp-tracker@gmail.com'),
+            #     to_emails=session['email'],
+            #     subject='Alert, expense limit exceeded',
+            #     html_content='<h3 style="color: red">Your expense limit has exceeded. <br><br>.</h3>')
+
+            # sg = SendGridAPIClient(
+            #     api_key='SENDGRID_API_KEY')
+
+            # response = sg.send(message)
+            print("Email sent")
+
+
         return redirect(url_for('dashboard'))
 
 
@@ -200,14 +235,25 @@ def view_expense():
 @app.route('/wallet')
 def wallet():
     walletSql = "SELECT balance, alert_limit FROM wallet WHERE user_email = ?"
+    walletSql2 = "SELECT SUM(amount) FROM expenses WHERE user_email = ? AND credit=?"
 
     walletStmt = ibm_db.prepare(conn, walletSql)
+    walletStmt2 = ibm_db.prepare(conn, walletSql2)
+
     ibm_db.bind_param(walletStmt, 1, session['email'])
     ibm_db.execute(walletStmt)
 
     wallet = ibm_db.fetch_assoc(walletStmt)
 
-    return render_template('wallet.html', wallet=wallet)
+    # Get total amount debited
+    ibm_db.bind_param(walletStmt2, 1, session['email'])
+    ibm_db.bind_param(walletStmt2, 2, False)
+    ibm_db.execute(walletStmt2)
+
+    result = ibm_db.fetch_assoc(walletStmt2)
+    amountSpent = result.get('1')
+
+    return render_template('wallet.html', wallet=wallet, amountSpent=amountSpent)
   
 
 @app.route('/wallet/update-limit', methods=["GET", "POST"])
