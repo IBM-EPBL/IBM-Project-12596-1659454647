@@ -106,29 +106,23 @@ def signup():
 @app.route('/dashboard', methods=['POST', 'GET'])
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    sql = "SELECT * FROM expenses WHERE user_email = ? ORDER BY datetime DESC LIMIT 10"
+    stmt = ibm_db.prepare(conn, sql)
+    ibm_db.bind_param(stmt, 1, session['email'])
+    ibm_db.execute(stmt)
 
+    expenses = []
+    record = ibm_db.fetch_assoc(stmt)
 
-@app.route('/expense', methods=['POST', 'GET'])
-@login_required
-def expense():
-    if request.method == "GET":
-        sql = "SELECT * FROM expenses WHERE user_email = ? ORDER BY datetime DESC LIMIT 10"
-        stmt = ibm_db.prepare(conn, sql)
-        ibm_db.bind_param(stmt, 1, session['email'])
-        ibm_db.execute(stmt)
-
-        expenses = []
+    while record != False:
+        expenses.append(record)
         record = ibm_db.fetch_assoc(stmt)
+    return render_template('dashboard.html', expenses=expenses)
 
-        while record != False:
-            print(record)
-            expenses.append(record)
-            record = ibm_db.fetch_assoc(stmt)
 
-        return render_template('expense.html', expenses=expenses)
-        
-    if request.method == "POST":
+@app.route('/expense/add', methods=['POST'])
+@login_required
+def add_expense():
         title = request.form['title']
         description = request.form['description']
         amount = request.form['Amount']
@@ -145,7 +139,44 @@ def expense():
         ibm_db.bind_param(pstmt, 5, expenseType == 1)
         ibm_db.bind_param(pstmt, 6, dateTime)
         ibm_db.execute(pstmt)
-        return redirect(url_for('expense'))
+        return redirect(url_for('dashboard'))
+
+
+@app.route('/expense/view', methods=['POST', 'GET'])
+@login_required
+def view_expense():
+    return render_template('view-expense.html')
+
+
+@app.route('/wallet')
+def wallet():
+#   wallet = db.execute("SELECT balance, wallet_limit FROM wallet WHERE username = :username",
+#               {
+#                 "username": session['user']
+#               }).fetchone()
+
+  return render_template('wallet.html', wallet=wallet)
+  
+
+@app.route('/wallet/update-limit', methods=["GET", "POST"])
+def updateWalletLimit():
+#   if request.method == "GET":
+#     return render_template("update-wallet.html")
+
+#   limit =  float(request.form['limit'])
+
+#   if limit < 0:
+#     return "<h1>Invalid limit</h1>"
+
+#   db.execute("UPDATE wallet SET wallet_limit = :limit WHERE username = :username",
+#               {
+#                 "limit" : limit,
+#                 "username" : session['user']
+#               })
+#   db.commit()
+
+#   flash('wallet updated succesfully', 'success')
+  return redirect("/wallet")
 
 @app.route('/logout')
 def logout():
