@@ -173,12 +173,15 @@ def view_expense():
 
 @app.route('/wallet')
 def wallet():
-#   wallet = db.execute("SELECT balance, wallet_limit FROM wallet WHERE username = :username",
-#               {
-#                 "username": session['user']
-#               }).fetchone()
+    walletSql = "SELECT balance, alert_limit FROM wallet WHERE user_email = ?"
 
-  return render_template('wallet.html', wallet=wallet)
+    walletStmt = ibm_db.prepare(conn, walletSql)
+    ibm_db.bind_param(walletStmt, 1, session['email'])
+    ibm_db.execute(walletStmt)
+
+    wallet = ibm_db.fetch_assoc(walletStmt)
+
+    return render_template('wallet.html', wallet=wallet)
   
 
 @app.route('/wallet/update-limit', methods=["GET", "POST"])

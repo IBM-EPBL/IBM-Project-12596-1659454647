@@ -1,22 +1,31 @@
-{% extends "layout.html" %}
+{% extends "appLayout.html" %}
 
 {% block title %}
   Wallet
 {% endblock %}
 
+{% block style %}
+  <style>
+    .wallet-container {
+      margin-top: 3rem;
+      margin-left: 5rem;
+    }
+  </style>
+{% endblock %}
+
 {% block body %}
+<div class="wallet-container">
   <div class="wallet">
-    <div>
+    <div class="custom-card">
+      <h3>Wallet Details:</h3><hr>
       <p>Balance:</p>
-      <p>{{ wallet.balance }}</p>
-    </div>
-    <div>
+      <p class="bold">{{ wallet.BALANCE }}</p><hr>
       <p>Limit:</p>
-      <p>{{ wallet.wallet_limit }}</p>
+      <p class="bold">{{ wallet.ALERT_LIMIT }}</p>
     </div>
   </div>
-  <div>
+  <div class="custom-card">
     <a class="button" href="/wallet/update-limit">Update Wallet Limit</a>
-    <a class="button secondary" href="/expenses/add">Add Expense</a>
   </div>
+</div>
 {% endblock %}
