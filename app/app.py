@@ -51,6 +51,7 @@ def login():
 
     if request.method == 'POST':
         un = request.form['username']
+        user_email = un
         pd = request.form['password_1']
         print(un, pd)
         sql = "SELECT * FROM users WHERE email =? AND password=?"
@@ -134,7 +135,8 @@ def dashBoard():
 @login_required
 def expense():
     if request.method == "GET":
-        sql = "SELECT * FROM expenses"
+        sql = "SELECT * FROM expenses where user_identifier='" + \
+            session['id']+"'"
         stmt = ibm_db.exec_immediate(conn, sql)
         expenses = []
         dictionary = ibm_db.fetch_assoc(stmt)
@@ -150,13 +152,14 @@ def expense():
         amount = request.form['Amount']
         expenseType = request.form['exampleRadios']
         date_object = datetime.date.today()
-        insert_sql = 'INSERT INTO expenses (title,description,amount,expensetype,created_at) VALUES (?,?,?,?,?)'
+        insert_sql = 'INSERT INTO expenses (title,description,amount,expensetype,created_at,user_identifier) VALUES (?,?,?,?,?,?)'
         pstmt = ibm_db.prepare(conn, insert_sql)
         ibm_db.bind_param(pstmt, 1, title)
         ibm_db.bind_param(pstmt, 2, description)
         ibm_db.bind_param(pstmt, 3, amount)
         ibm_db.bind_param(pstmt, 4, expenseType)
         ibm_db.bind_param(pstmt, 5, date_object)
+        ibm_db.bind_param(pstmt, 6, session['id'])
         ibm_db.execute(pstmt)
         return redirect(url_for('expense'))
 
