@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %} {% endblock %}</title>
+  <!-- Latest compiled and minified CSS -->
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+  crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="static/css/style.css" />
+
+  <style>
+    .expense-container {
+      margin-left: 5rem;
+    }
+
+    .main-container {
+      margin-top: 3rem;
+      margin-left: 5rem;
+    }
+
+    .expense-container h1, .main-container h1 {
+      color: #fff;
+    }
+
+    .custom-card {
+      background-color: #fff;
+      padding: 1.5rem 2rem;
+      border-radius: 20px;
+      margin-bottom: 2rem;
+      max-width: 500px;
+    }    
+
+    .custom-card p {
+      color: #000;
+      font-weight: 700;
+    }
+
+    a {
+      display: inline-block;
+    }
+
+    a.button{
+      background-color: dodgerblue;
+      color: #fff;
+      margin-left: 20px;
+      padding: 20px 25px;
+      font-size: 16px;
+      border-radius: 20px;
+    }
+
+    a.button.secondary {
+      background-color: yellow;
+      color: #000;
+    }
+  </style>
+
+  {% block style %} {% endblock %}
+
+
+</head>
+
+<body>
+  <!--Main Navigation-->
+  <div class="container-fluid" style="background: #000">
+    <div class="row flex-nowrap">
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                <a href="#" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                    <span class="fs-5 d-none d-sm-inline">Expense Tracker</span>
+                </a>
+                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Expense</button>
+                <ul  class="nav nav-pills flex-column mb-sm-auto mb-0  align-items-sm-start" id="menu">
+                    <li class="nav-item">
+                        <a href="{{ url_for('dashboard') }}" class="nav-link align-middle px-0">
+                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">DashBoard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{url_for('view_expense') }}"  class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">view expenses</span> </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('wallet') }}" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Wallet</span></a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('logout') }}" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Logout</span> </a>
+                    </li>
+                </ul>
+                <hr>
+            </div>
+        </div>
+        {% block body %} {% endblock %}
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Expense</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <form action="{{url_for('add_expense') }}" method="post">
+              <div class="form-group">
+                <label for="title" class="col-sm-2 col-form-label">Title</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" name="title" id="title" placeholder="Enter the Title">
+                </div>
+              </div>
+
+              <div class="form-group">
+                  <label for="Description" class="col-sm-2 col-form-label">Description</label>
+                  <div class="col-sm-10">
+                  <textarea name= "description" class="form-control"id="Description" rows="2"></textarea>
+                  </div>
+                </div>
+              
+              <div class="form-group">
+                <label for="amount" class="col-sm-2 col-form-label">Amount</label>
+                <div class="col-sm-10">
+                  <input name="Amount" type="number" class="form-control" id="amount" placeholder="Enter the Amount">
+                </div>
+              </div>
+
+              <div class="form-group">
+                  <label for="amount" class="col-sm-3 col-form-label">Expense Type</label>
+
+                  <div class="col-sm-9">
+                   
+                  <div class="form-check">
+                      <input class="form-check-input" type="radio" name="expense-type" id="exampleRadios1" value="0">
+                      <label class="form-check-label" for="exampleRadios1">
+                        Debit
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="expense-type" id="exampleRadios1" value="1">
+                      <label class="form-check-label" for="exampleRadios1">
+                        Credit
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" value="submit" class="btn btn-primary">Submit</button>
+                </div>
+              </form>
+      </div>
+      
+    </div>
+  </div>
+
+</div>
+<!--Main Navigation-->
+</body>
+</html>

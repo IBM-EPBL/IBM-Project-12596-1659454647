@@ -1,0 +1,23 @@
+{% extends "appLayout.html" %}
+
+{% block title %} Dashboard {% endblock %}
+
+{% block body %}
+    <div class="expense-container col py-3">
+        <h1>Recent expenses</h1>
+        <div>
+        {% for expense in expenses %}
+            <div class="custom-card">
+            <h3>Title: {{ expense.TITLE }}</h3>
+            <p>Description: {{ expense.DESCRIPTION }}</p>
+            <p>Amount: <strong>{{ expense.AMOUNT }}</strong></p>
+                {% if expense.CREDIT == True %}
+                <p>Type: Credit</p>
+                {% else %}
+                <p>Type: Debit</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+{% endblock %}
