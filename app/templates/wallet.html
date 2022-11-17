@@ -4,23 +4,14 @@
   Wallet
 {% endblock %}
 
-{% block style %}
-  <style>
-    .wallet-container {
-      margin-top: 3rem;
-      margin-left: 5rem;
-    }
-  </style>
-{% endblock %}
-
 {% block body %}
-<div class="wallet-container">
+<div class="main-container">
   <div class="wallet">
     <div class="custom-card">
       <h3>Wallet Details:</h3><hr>
       <p>Balance:</p>
       <p class="bold">{{ wallet.BALANCE }}</p><hr>
-      <p>Limit:</p>
+      <p>Alert Limit:</p>
       <p class="bold">{{ wallet.ALERT_LIMIT }}</p>
     </div>
   </div>

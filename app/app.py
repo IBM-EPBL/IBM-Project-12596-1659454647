@@ -186,23 +186,22 @@ def wallet():
 
 @app.route('/wallet/update-limit', methods=["GET", "POST"])
 def updateWalletLimit():
-#   if request.method == "GET":
-#     return render_template("update-wallet.html")
+    if request.method == "GET":
+        return render_template("update-wallet.html")
 
-#   limit =  float(request.form['limit'])
+    limit =  int(request.form['limit'])
 
-#   if limit < 0:
-#     return "<h1>Invalid limit</h1>"
+    if limit < 1000:
+        return redirect("/wallet")
 
-#   db.execute("UPDATE wallet SET wallet_limit = :limit WHERE username = :username",
-#               {
-#                 "limit" : limit,
-#                 "username" : session['user']
-#               })
-#   db.commit()
+    walletSql = "UPDATE wallet SET alert_limit = ? WHERE user_email = ?"
 
-#   flash('wallet updated succesfully', 'success')
-  return redirect("/wallet")
+    walletStmt = ibm_db.prepare(conn, walletSql)
+    ibm_db.bind_param(walletStmt, 1, limit)
+    ibm_db.bind_param(walletStmt, 2, session['email'])
+    ibm_db.execute(walletStmt)
+
+    return redirect("/wallet")
 
 @app.route('/logout')
 def logout():

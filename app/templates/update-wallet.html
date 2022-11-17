@@ -1,14 +1,59 @@
-{% extends "layout.html" %}
+{% extends "appLayout.html" %}
 
 {% block title %}
   Update wallet
 {% endblock %}
 
-{% block body %}
-  <form action="/wallet/update-limit" method="post">
-    <label>Limit</label>
-    <input type="number" name="limit" placeholder="wallet limit" required>
+{% block style %}
+  <style>
 
-    <button>Update limit</button>
-  </form>
+    form {
+      background-color: #fff;
+      width: 700px;
+      padding: 20px 25px;
+    }
+
+    form label {
+      color: #000;
+      display: block;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    form input {
+      margin: 2rem 0 2rem 0;
+    }
+
+    form input {
+      position: relative;
+      width: 100%;
+      box-sizing: border-box;
+      border: 2.5px solid #ddd;
+    }
+
+    form button {
+      background-color: dodgerblue;
+      color: #fff;
+      padding: 15px 20px;
+      font-size: 17px;
+      font-weight: 600;
+      outline: none;
+      border-radius: 20px;
+    }
+
+  </style>
+{% endblock %}
+
+{% block body %}
+  <div class="main-container">
+    <h1>Update Wallet Limit</h1>
+    <form action="/wallet/update-limit" method="post">
+      <div class="form-group">
+        <label>Limit</label>
+        <input type="number" class="form-control" name="limit" placeholder="wallet limit" required>
+      </div>
+      
+      <button>Update limit</button>
+    </form>
+  </div>
 {% endblock %}
