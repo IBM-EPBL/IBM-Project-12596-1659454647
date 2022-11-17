@@ -110,7 +110,7 @@ def signup():
         return render_template("signup.html", meg=mg)
 
 
-@app.route('/dashboard', methods=['POST', 'GET'])
+@app.route('/dashboard', methods=['GET'])
 @login_required
 def dashboard():
     sql = "SELECT * FROM expenses WHERE user_email = ? ORDER BY datetime DESC LIMIT 10"
@@ -168,7 +168,32 @@ def add_expense():
 @app.route('/expense/view', methods=['POST', 'GET'])
 @login_required
 def view_expense():
-    return render_template('view-expense.html')
+    if request.method == "GET":
+        return render_template('view-expense.html', actionType = 0)
+
+    fromDate = request.form['from-date']
+    fromYear, fromMonth, fromDay = fromDate.split('-')
+    toDate = request.form['to-date']
+    toYear, toMonth, toDay = toDate.split('-')
+
+    fromDate = datetime(int(fromYear), int(fromMonth), int(fromDay), 0, 0, 0)
+    toDate = datetime(int(toYear), int(toMonth), int(toDay), 23, 59, 59)
+
+    sql = "SELECT * FROM expenses WHERE user_email = ? AND dateTime BETWEEN ? AND ? ORDER BY datetime ASC"
+    stmt = ibm_db.prepare(conn, sql)
+    ibm_db.bind_param(stmt, 1, session['email'])
+    ibm_db.bind_param(stmt, 2, fromDate)
+    ibm_db.bind_param(stmt, 3, toDate)
+
+    ibm_db.execute(stmt)
+
+    expenses = []
+    record = ibm_db.fetch_assoc(stmt)
+
+    while record != False:
+        expenses.append(record)
+        record = ibm_db.fetch_assoc(stmt)
+    return render_template('view-expense.html', expenses=expenses, actionType = 1)
 
 
 @app.route('/wallet')
