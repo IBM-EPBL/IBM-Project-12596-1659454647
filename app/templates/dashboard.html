@@ -28,7 +28,7 @@
                 </a>
                 <ul  class="nav nav-pills flex-column mb-sm-auto mb-0  align-items-sm-start" id="menu">
                     <li class="nav-item">
-                        <a href="#" class="nav-link align-middle px-0">
+                        <a href="{{ url_for('dashboard') }}" class="nav-link align-middle px-0">
                             <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">DashBoard</span>
                         </a>
                     </li>
@@ -37,11 +37,11 @@
                             <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Expenses</span> </a>
                     </li>
                     <li>
-                        <a href="#" class="nav-link px-0 align-middle">
+                        <a href="{{ url_for('wallet') }}" class="nav-link px-0 align-middle">
                             <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Wallet</span></a>
                     </li>
                     <li>
-                        <a href="#" class="nav-link px-0 align-middle">
+                        <a href="{{ url_for('logout') }}" class="nav-link px-0 align-middle">
                             <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Logout</span> </a>
                     </li>
                 </ul>
@@ -49,7 +49,7 @@
             </div>
         </div>
         <div class="col py-3">
-            Hi snekan
+            Hi {{ session['username'] }}
         </div>
     </div>
 </div>
