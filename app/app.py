@@ -130,6 +130,35 @@ def dashBoard():
     return render_template('dashboard.html')
 
 
+@app.route('/expense', methods=['POST', 'GET'])
+@login_required
+def expense():
+    if request.method == "GET":
+        sql = "SELECT * FROM expenses"
+        stmt = ibm_db.exec_immediate(conn, sql)
+        expenses = []
+        dictionary = ibm_db.fetch_assoc(stmt)
+        print(dictionary)
+        while dictionary != False:
+            expenses.append(dictionary)
+            dictionary = ibm_db.fetch_assoc(stmt)
+
+        return render_template('expense.html', expenses=expenses)
+    if request.method == "POST":
+        title = request.form['title']
+        description = request.form['description']
+        amount = request.form['Amount']
+        expenseType = request.form['exampleRadios']
+        insert_sql = 'INSERT INTO expenses (title,description,amount,expensetype) VALUES (?,?,?,?)'
+        pstmt = ibm_db.prepare(conn, insert_sql)
+        ibm_db.bind_param(pstmt, 1, title)
+        ibm_db.bind_param(pstmt, 2, description)
+        ibm_db.bind_param(pstmt, 3, amount)
+        ibm_db.bind_param(pstmt, 4, expenseType)
+        ibm_db.execute(pstmt)
+        return redirect(url_for('expense'))
+
+
 if __name__ == '__main__':
     app.run(debug=True)
 
