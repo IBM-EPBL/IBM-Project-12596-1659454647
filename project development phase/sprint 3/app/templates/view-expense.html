@@ -1,0 +1,93 @@
+{% extends "appLayout.html" %}
+
+{% block title %}
+  View Expense
+{% endblock %}
+
+{% block style %}
+  <style>
+
+    form {
+      background-color: #fff;
+      width: 700px;
+      padding: 20px 25px;
+    }
+
+    form label {
+      color: #000;
+      display: block;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    form input {
+      margin: 2rem 0 2rem 0;
+    }
+
+    form input {
+      position: relative;
+      width: 100%;
+      box-sizing: border-box;
+      border: 2.5px solid #ddd;
+    }
+
+    form button {
+      background-color: dodgerblue;
+      color: #fff;
+      padding: 15px 20px;
+      font-size: 17px;
+      font-weight: 600;
+      outline: none;
+      border-radius: 20px;
+    }
+
+  </style>
+{% endblock %}
+
+{% block body %}
+  <div class="main-container">
+    <h1>View Expense</h1>
+    <form action="/expense/view" method="post">
+      <div class="form-group">
+        <label>Select from date:</label>
+        <input type="date" class="form-control" name="from-date" placeholder="wallet limit" required>
+      </div>
+      
+      <div class="form-group">
+        <label>Select to date</label>
+        <input type="date" class="form-control" name="to-date" placeholder="wallet limit" required>
+      </div>
+      <button>Submit</button>
+    </form>
+
+    {% if actionType == 1 %}
+      <div class="expense-container col py-3">
+
+        <h1>Expenses:</h1>
+        <div>
+        {% if expenses | length > 0 %}
+
+          {% for expense in expenses %}
+              <div class="custom-card">
+              <h3>Title: {{ expense.TITLE }}</h3>
+              <p>Description: {{ expense.DESCRIPTION }}</p>
+              <p>Amount: <strong>{{ expense.AMOUNT }}</strong></p>
+                
+              {% if expense.CREDIT == True %}
+                <p>Type: Credit</p>
+              {% else %}
+                <p>Type: Debit</p>
+              {% endif %}
+              
+              <p>Date: {{ expense.DATETIME }}</p>
+              </div>
+          {% endfor %}
+        {% else %}
+          <h3 style="color: #fff">No Expenses in given range</h3>
+        {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+  </div>
+{% endblock %}

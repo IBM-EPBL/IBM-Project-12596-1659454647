@@ -1,0 +1,22 @@
+{% extends "appLayout.html" %}
+
+{% block title %}
+  Wallet
+{% endblock %}
+
+{% block body %}
+<div class="main-container">
+  <div class="wallet">
+    <div class="custom-card">
+      <h3>Wallet Details:</h3><hr>
+      <p>Balance:</p>
+      <p class="bold">{{ wallet.BALANCE }}</p><hr>
+      <p>Alert Limit:</p>
+      <p class="bold">{{ wallet.ALERT_LIMIT }}</p>
+    </div>
+  </div>
+  <div class="custom-card">
+    <a class="button" href="/wallet/update-limit">Update Wallet Limit</a>
+  </div>
+</div>
+{% endblock %}
