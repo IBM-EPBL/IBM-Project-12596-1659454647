@@ -7,11 +7,21 @@ import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from datetime import datetime
+from flask_mail import Mail, Message
 
 conn = ibm_db.connect("DATABASE=bludb;HOSTNAME=ea286ace-86c7-4d5b-8580-3fbfa46b1c66.bs2io90l08kqb1od8lcg.databases.appdomain.cloud;PORT=31505;SECURITY=SSL;SSLServerCertificate=ssl.crt;UID=qxn78437;PWD=whNl99ZgMIttkZ80", '', '')
 
 app = Flask(__name__)
 app.secret_key = 'jackiechan'
+
+app.config['MAIL_SERVER'] = 'smtp.sendgrid.net'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'apikey'
+app.config['MAIL_PASSWORD'] = os.envrion.get('SENDGRID_API_KEY')
+app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_DEFAULT_SENDER')
+
+mail = Mail(app)
 
 
 def rewrite(url):
@@ -33,17 +43,6 @@ def root():
     return render_template('login.html')
 
 
-@app.route('/user/<id>')
-# @login_required
-def user_info(id):
-    with sql.connect('inventorymanagement.db') as con:
-        con.row_factory = sql.Row
-        cur = con.cursor()
-        cur.execute(f'SELECT * FROM users')
-        user = cur.fetchall()
-    return render_template("user_info.html", user=user[0])
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     global userid
@@ -53,14 +52,12 @@ def login():
         un = request.form['username']
         user_email = un
         pd = request.form['password_1']
-        print(un, pd)
         sql = "SELECT * FROM users WHERE username =? AND password=?"
         stmt = ibm_db.prepare(conn, sql)
         ibm_db.bind_param(stmt, 1, un)
         ibm_db.bind_param(stmt, 2, pd)
         ibm_db.execute(stmt)
         account = ibm_db.fetch_assoc(stmt)
-        print(account)
         if account:
             session['username'] = account['USERNAME']
             session['email'] = account['EMAIL']
@@ -185,16 +182,11 @@ def add_expense():
 
         # Send email.
         if amountSpent > wallet.get("ALERT_LIMIT"):
-            message = Mail(
-                from_email=('ashikrasheed7@gmail.com'),
-                to_emails=session['email'],
-                subject='Alert, expense limit exceeded',
-                html_content='<h3 style="color: red">Your expense limit has exceeded. <br><br>.</h3>')
+            msg = Message('Alert: limit exceeded', recipients=[session['email']])
+            msg.body = 'Your expense limit has exceeded.'
+            msg.html = '<h3 style="color: red">Your expense limit has exceeded. <br><br>.</h3>'
 
-            sg = SendGridAPIClient(
-                api_key='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')
-
-            response = sg.send(message)
+            mail.send(msg)
             print("Email sent")
 
 
