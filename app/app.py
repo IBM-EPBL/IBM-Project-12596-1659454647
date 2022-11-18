@@ -185,16 +185,16 @@ def add_expense():
 
         # Send email.
         if amountSpent > wallet.get("ALERT_LIMIT"):
-            # message = Mail(
-            #     from_email=('test-exp-tracker@gmail.com'),
-            #     to_emails=session['email'],
-            #     subject='Alert, expense limit exceeded',
-            #     html_content='<h3 style="color: red">Your expense limit has exceeded. <br><br>.</h3>')
+            message = Mail(
+                from_email=('ashikrasheed7@gmail.com'),
+                to_emails=session['email'],
+                subject='Alert, expense limit exceeded',
+                html_content='<h3 style="color: red">Your expense limit has exceeded. <br><br>.</h3>')
 
-            # sg = SendGridAPIClient(
-            #     api_key='SENDGRID_API_KEY')
+            sg = SendGridAPIClient(
+                api_key='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')
 
-            # response = sg.send(message)
+            response = sg.send(message)
             print("Email sent")
 
 
