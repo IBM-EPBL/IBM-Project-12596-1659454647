@@ -1,7 +1,7 @@
  apiVersion: v1
  kind: Service
  metadata:
-   name: flask-node-deployment
+   name: flask-app-service
  spec:
    ports:
    - port: 5000

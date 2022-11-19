@@ -1,4 +1,4 @@
- apiVersion: extensions/v1beta1
+ apiVersion: apps/v1
  kind: Deployment
  metadata:
    name: flask-node-deployment
@@ -14,7 +14,7 @@
      spec:
        containers:
        - name: flasknode
-         image: registry.ng.bluemix.net/personal-exp-tracker/app
+         image: de.icr.io/flask-node/app-4
          imagePullPolicy: Always
          ports:
          - containerPort: 5000
